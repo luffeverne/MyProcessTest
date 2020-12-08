@@ -84,7 +84,7 @@ public class Step1_FindCenterOfCircle {
 
        /* HighGui.imshow("边界框和圆", src);
         HighGui.waitKey();*/
-        Imgcodecs.imwrite("C:\\Users\\Luffe\\Pictures\\test\\circles\\src_process"+index+".jpg", src);
+        Imgcodecs.imwrite("src/images/src_process"+index+".jpg", src);
     }
 
 }

@@ -65,6 +65,13 @@ public class MainGUI {
         }
     });
 
+    JMenuItem exit = new JMenuItem(new AbstractAction("关闭程序") {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.exit(0);
+        }
+    });
+
     // 创建工具条
     JToolBar toolBar = new JToolBar();
 
@@ -74,7 +81,8 @@ public class MainGUI {
         public void actionPerformed(ActionEvent e) {
             new Step1_FindCenterOfCircle().handlePicture(currentPath, currentIndex);
             images[currentIndex].setName("src_process" + currentIndex + ".jpg");
-            images[currentIndex].setIcon(new ImageIcon("C:\\Users\\Luffe\\Pictures\\test\\circles\\src_process"+currentIndex+".jpg"));
+            images[currentIndex].setIcon(new ImageIcon("src/images/src_process"+currentIndex+".jpg"));
+            System.out.println(images[currentIndex].getIcon());
         }
     };
     Action selectBaseVector = new AbstractAction("2.选择基矢点") {
@@ -105,9 +113,8 @@ public class MainGUI {
 
     public void init() {
         /* 组装视图*/
-
         file.add(openFileItem);
-//        file.add(closeFileItem);
+        file.add(exit);
         jMenuBar.add(file);
         jMenuBar.add(help);
         jf.setJMenuBar(jMenuBar);
