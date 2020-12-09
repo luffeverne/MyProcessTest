@@ -13,13 +13,14 @@ public class Step1_FindCenterOfCircle {
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
-//    public void handlePicture(String path) {
-        public void handlePicture(String path, int index) {
-//       Mat src = Imgcodecs.imread("C:\\Users\\Luffe\\Pictures\\test\\circles\\ImageTest.tif");
+
+    public String[] handlePicture(String path, int index) {
+        String[] resCoordinates = new String[100];
+
         Mat src = Imgcodecs.imread(path);
         if (src == null) {
             System.out.println("error");
-            return;
+            return null;
         }
 /*
         HighGui.imshow("原图", src);
@@ -69,22 +70,32 @@ public class Step1_FindCenterOfCircle {
         }
 
         for (int i = 0; i < list.size(); i++) {
-            Scalar color = new Scalar(0, 220, 0);
-            Scalar color2 = new Scalar(0, 0 , 220);
+            Scalar color = new Scalar(255, 255 , 255);
+            Scalar color2 = new Scalar(0, 0 , 0);
 
             // 绘制圆心
-            Imgproc.circle(src, centerList.get(i), 1, color2, 1, Imgproc.LINE_AA);
+            Imgproc.circle(src, centerList.get(i), 1, color, 1, Imgproc.LINE_AA);
+//            Imgproc.drawMarker(src, centerList.get(i), color);
+
 
             // 输出圆心点集
 //            System.out.println(centerList.get(i));
             String centerX = String.format("%.1f", centerList.get(i).x);
             String centerY = String.format("%.1f", centerList.get(i).y);
-            System.out.println("("+centerX+", "+centerY+")");
+            String tStr = ("("+centerX+", "+centerY+")");
+            resCoordinates[i] = tStr;
+//            System.out.println("("+centerX+", "+centerY+")");
+
+            // 绘制坐标
+            Imgproc.putText(src, tStr, centerList.get(i), 1, 0.8, color);
+
         }
 
        /* HighGui.imshow("边界框和圆", src);
         HighGui.waitKey();*/
         Imgcodecs.imwrite("src/images/src_process"+index+".jpg", src);
+
+        return resCoordinates;
     }
 
 }

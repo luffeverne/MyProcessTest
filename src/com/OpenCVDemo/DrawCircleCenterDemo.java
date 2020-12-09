@@ -16,7 +16,7 @@ public class DrawCircleCenterDemo {
 
     public void test() {
         //        Mat src = Imgcodecs.imread("C:\\Users\\Luffe\\Pictures\\test\\circles\\12.jpg");
-        String path = "C:\\Users\\Luffe\\Pictures\\test\\circles\\12.jpg";
+        String path = "src/images/ImageTest.png";
         Mat src = Imgcodecs.imread(path);
         Mat dst = new Mat();
 
@@ -62,8 +62,8 @@ public class DrawCircleCenterDemo {
         }
 
         for (int i = 0; i < list.size(); i++) {
-            Scalar color = new Scalar(0, 220, 0);
-            Scalar color2 = new Scalar(0, 0 , 220);
+            Scalar color = new Scalar(255, 255, 255);
+            Scalar color2 = new Scalar(0, 0, 0);
 
             //绘制轮廓
 //            Imgproc.drawContours(src, approxCurvelList, i, color, 4, Imgproc.LINE_AA, new Mat(), 0, new Point());
@@ -75,13 +75,17 @@ public class DrawCircleCenterDemo {
 //            Imgproc.circle(src, centerList.get(i), radiusList.get(i), color2, 1, Imgproc.LINE_AA, 0);
 
             // 绘制圆心
-            Imgproc.circle(src, centerList.get(i), 1, color2, 1, Imgproc.LINE_AA);
+            Imgproc.circle(src, centerList.get(i), 1, color, 1, Imgproc.LINE_AA);
+
 
             // 输出圆心点集
 //            System.out.println(centerList.get(i));
             String centerX = String.format("%.1f", centerList.get(i).x);
             String centerY = String.format("%.1f", centerList.get(i).y);
+            String str = "("+centerX+", "+centerY+")";
             System.out.println("("+centerX+", "+centerY+")");
+
+            Imgproc.putText(src, str, centerList.get(i), 1, 0.8, color);
 
         }
 
