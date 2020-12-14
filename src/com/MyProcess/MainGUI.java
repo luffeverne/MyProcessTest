@@ -50,7 +50,7 @@ public class MainGUI {
     // 用来记录用户选择的图片
     BufferedImage image;
     String currentPath; // 记录当前路径
-    int currentIndex; //记录当前图片序号
+    int currentIndex = 0; //记录当前图片序号
     JMenuItem openFileItem = new JMenuItem(new AbstractAction("打开文件") {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -73,7 +73,7 @@ public class MainGUI {
             images[index%3].setIcon(new ImageIcon(imagePath));
             index++;
 
-            currentIndex = index == 0 ? 0 : index%3 - 1;
+            currentIndex = (index == 0 ? 0 : index%3 - 1);
             currentPath = imagePath;
         }
     });
@@ -93,9 +93,10 @@ public class MainGUI {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            // 保存所有坐标值
             coordinates = new Step1_FindCenterOfCircle().handlePicture(currentPath, currentIndex);
-            images[currentIndex].setName("src_process" + currentIndex + ".jpg");
-            images[currentIndex].setIcon(new ImageIcon("src/images/src_process"+currentIndex+".jpg"));
+            images[currentIndex%3].setName("src_process" + currentIndex%3 + ".jpg");
+            images[currentIndex%3].setIcon(new ImageIcon("src/images/src_process"+currentIndex%3+".jpg"));
         }
     };
 
@@ -103,7 +104,10 @@ public class MainGUI {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int result = JOptionPane.showConfirmDialog(jf, coordinates, "所有圆心坐标", JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE);
+
+            MyShowDialog myShowDialog = new MyShowDialog();
+            myShowDialog.showCustomDialog(jf, jf, coordinates);
+//            int result = JOptionPane.showConfirmDialog(jf, coordinates, "所有圆心坐标", JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE);
             /*if (result == JOptionPane.YES_OPTION) {
                 System.out.println("ok");
             }*/
@@ -158,6 +162,8 @@ public class MainGUI {
         // 组装分割面板
         imagesJList.setPreferredSize(new Dimension(220, 800));
         imageCover.setPreferredSize(new Dimension(780, 800));
+     /*   imageCover.setHorizontalTextPosition(SwingConstants.TOP);
+        imageCover.setVerticalAlignment(SwingConstants.LEFT);*/
 
         // add Action Listener for imagesJList
         imagesJList.addListSelectionListener(new ListSelectionListener() {

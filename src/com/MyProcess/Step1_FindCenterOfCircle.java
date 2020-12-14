@@ -16,6 +16,7 @@ public class Step1_FindCenterOfCircle {
 
     public String[] handlePicture(String path, int index) {
         String[] resCoordinates = new String[100];
+        String strNum ="";
 
         Mat src = Imgcodecs.imread(path);
         if (src == null) {
@@ -35,7 +36,7 @@ public class Step1_FindCenterOfCircle {
         Imgproc.blur(dst, dst, new Size(3, 3));
 
         // 将固定级别的阈值应用于每个数组元素。
-        Imgproc.threshold(dst, dst, 200, 255, Imgproc.THRESH_BINARY);
+        Imgproc.threshold(dst, dst, 128, 255, Imgproc.THRESH_BINARY_INV);
 
         // 查找二进制图像中的轮廓
 
@@ -65,13 +66,16 @@ public class Step1_FindCenterOfCircle {
             // 查找包含2D点集的最小面积的圆，使用迭代算法找到2D点集的最小封闭圆
             Imgproc.minEnclosingCircle(approxCurve, center, radius);
 
+
+
+
             centerList.add(center);
             radiusList.add((int)radius[0]);
         }
 
         for (int i = 0; i < list.size(); i++) {
             Scalar color = new Scalar(255, 255 , 255);
-            Scalar color2 = new Scalar(0, 0 , 0);
+            Scalar color2 = new Scalar(0, 0 , 255);
 
             // 绘制圆心
             Imgproc.circle(src, centerList.get(i), 1, color, 1, Imgproc.LINE_AA);
@@ -80,14 +84,20 @@ public class Step1_FindCenterOfCircle {
 
             // 输出圆心点集
 //            System.out.println(centerList.get(i));
+
+            strNum ="";
+            strNum = strNum+i;
+
             String centerX = String.format("%.1f", centerList.get(i).x);
             String centerY = String.format("%.1f", centerList.get(i).y);
             String tStr = ("("+centerX+", "+centerY+")");
-            resCoordinates[i] = tStr;
+            resCoordinates[i] = strNum+" "+tStr;
 //            System.out.println("("+centerX+", "+centerY+")");
 
+
+
             // 绘制坐标
-            Imgproc.putText(src, tStr, centerList.get(i), 1, 0.8, color);
+            Imgproc.putText(src, strNum, centerList.get(i), 1, 0.8, color2);
 
         }
 

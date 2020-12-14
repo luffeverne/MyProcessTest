@@ -27,7 +27,7 @@ public class DrawCircleCenterDemo {
         Imgproc.blur(dst, dst, new Size(3, 3));
 
         // 将固定级别的阈值应用于每个数组元素。
-        Imgproc.threshold(dst, dst, 200, 255, Imgproc.THRESH_BINARY);
+        Imgproc.threshold(dst, dst, 128, 255, Imgproc.THRESH_BINARY_INV);
 
         // 查找二进制图像中的轮廓
 
@@ -63,7 +63,7 @@ public class DrawCircleCenterDemo {
 
         for (int i = 0; i < list.size(); i++) {
             Scalar color = new Scalar(255, 255, 255);
-            Scalar color2 = new Scalar(0, 0, 0);
+            Scalar color2 = new Scalar(0, 0, 255);
 
             //绘制轮廓
 //            Imgproc.drawContours(src, approxCurvelList, i, color, 4, Imgproc.LINE_AA, new Mat(), 0, new Point());
@@ -85,14 +85,14 @@ public class DrawCircleCenterDemo {
             String str = "("+centerX+", "+centerY+")";
             System.out.println("("+centerX+", "+centerY+")");
 
-            Imgproc.putText(src, str, centerList.get(i), 1, 0.8, color);
+            Imgproc.putText(src, str, centerList.get(i), 1, 0.8, color2);
 
         }
 
         HighGui.imshow("边界框和圆", src);
         HighGui.waitKey();
 
-        Imgcodecs.imwrite("C:\\Users\\Luffe\\Pictures\\test\\circles\\13.jpg", src);
+//        Imgcodecs.imwrite("C:\\Users\\Luffe\\Pictures\\test\\circles\\13.jpg", src);
     }
 
     public static void main(String[] args) {

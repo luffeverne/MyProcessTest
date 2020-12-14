@@ -1,30 +1,97 @@
+/*
 package com.Test;
 
+
 import javax.swing.*;
+
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
-import static java.awt.Color.*;
 
-public class test {
+
+public class Test {
+
+
 
     public static void main(String[] args) {
-        JFrame jf = new JFrame("test");
-        JLabel explainLabel=new JLabel ("说明");
 
-        explainLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int mount = 0;
-                System.out.println("the mouse is clicked"+(mount++));
-            }
-        });
+        JFrame jf = new JFrame("测试窗口");
 
-        jf.add(explainLabel);
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+
+
+        // 创建内容面板，默认使用流式布局
+
+        JPanel panel = new JPanel();
+
+
+
+        */
+/*
+
+         * 只显示文本
+
+         *//*
+
+
+        JLabel label01 = new JLabel();
+
+        label01.setText("Only Text");
+
+        label01.setFont(new Font(null, Font.PLAIN, 25));  // 设置字体，null 表示使用默认字体
+
+        panel.add(label01);
+
+
+
+        */
+/*
+
+         * 只显示图片
+
+         *//*
+
+
+        JLabel label02 = new JLabel();
+
+        label02.setIcon(new ImageIcon("demo01.jpg"));
+
+        panel.add(label02);
+
+
+
+        */
+/*
+
+         * 同时显示文本和图片
+
+         *//*
+
+
+        JLabel label03 = new JLabel();
+
+        label03.setText("文本和图片");
+
+        label03.setIcon(new ImageIcon("demo02.jpg"));
+
+        label03.setHorizontalTextPosition(SwingConstants.CENTER);   // 水平方向文本在图片中心
+
+        label03.setVerticalTextPosition(SwingConstants.BOTTOM);     // 垂直方向文本在图片下方
+
+        panel.add(label03);
+
+
+
+        jf.setContentPane(panel);
+
         jf.pack();
+
+        jf.setLocationRelativeTo(null);
+
         jf.setVisible(true);
+
     }
 
-}
+
+
+}*/
