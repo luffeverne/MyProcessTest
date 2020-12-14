@@ -104,11 +104,10 @@ public class MainGUI {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
-            MyShowDialog myShowDialog = new MyShowDialog();
-            myShowDialog.showCustomDialog(jf, jf, coordinates);
-//            int result = JOptionPane.showConfirmDialog(jf, coordinates, "所有圆心坐标", JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE);
-            /*if (result == JOptionPane.YES_OPTION) {
+            // 自定义展示坐标对话框
+            new MyShowDialog().showCustomDialog(jf, jf, coordinates);
+            /* int result = JOptionPane.showConfirmDialog(jf, coordinates, "所有圆心坐标", JOptionPane.YES_OPTION, JOptionPane.INFORMATION_MESSAGE);
+            if (result == JOptionPane.YES_OPTION) {
                 System.out.println("ok");
             }*/
         }
@@ -116,6 +115,8 @@ public class MainGUI {
     Action selectBaseVector = new AbstractAction("选择基矢点") {
         @Override
         public void actionPerformed(ActionEvent e) {
+            // 自定义设置基矢点对话框 。用户输入基矢点的"上下左右"点
+            new MySelectCoordinateDialog().showCustomDialog(jf, jf);
         }
     };
     Action reviseBaseVector = new AbstractAction("修正基矢值") {
@@ -139,8 +140,6 @@ public class MainGUI {
 
     JPanel panel = new JPanel();
 
-    // 给JLabel添加鼠标点击事件
-
 
     public void init() {
         /* 组装视图*/
@@ -162,8 +161,7 @@ public class MainGUI {
         // 组装分割面板
         imagesJList.setPreferredSize(new Dimension(220, 800));
         imageCover.setPreferredSize(new Dimension(780, 800));
-     /*   imageCover.setHorizontalTextPosition(SwingConstants.TOP);
-        imageCover.setVerticalAlignment(SwingConstants.LEFT);*/
+
 
         // add Action Listener for imagesJList
         imagesJList.addListSelectionListener(new ListSelectionListener() {
@@ -179,11 +177,8 @@ public class MainGUI {
            public void mouseClicked(MouseEvent e) {
                // 获取当前JLabel窗口的坐标
                System.out.println("("+e.getX()+","+e.getY()+")");
-               // 对话框 -设为基矢原点吗？
+               // 自定义对话框 -设置基矢点。用户输入基矢点的"上下左右"点
 
-               // 是：选择基矢函数方法  参数：传坐标值
-
-               // 否：什么都不做
 
            }
        });

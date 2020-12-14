@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 
 public class MyShowDialog {
 
-    /* 显示一个自定义对话框
+    /* 显示一个自定义显示所有坐标值的对话框
      *
      * @param owner 对话框的拥有者
      * @param parentComponent 对话框的父级组件
