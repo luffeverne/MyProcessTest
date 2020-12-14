@@ -28,11 +28,10 @@ public class MyShowDialog {
         // 设置对话框相对显示位置
         dialog.setLocationRelativeTo(parentComponent);
 
-        // 创建标签显示消息
+        // 创建文本域显示坐标信息
         JTextArea jTextArea = new JTextArea(30, 20);
 
-        // 给标签添加内容
-//        String str="";
+        // 给文本域添加内容
         for (String str : arrs) {
             if (str == null)
                 break;
@@ -42,11 +41,11 @@ public class MyShowDialog {
 
 
         // 创建一个按钮用于关闭对话框
-        JButton btnOK = new JButton("确定");
-        btnOK.addActionListener(new ActionListener() {
+        JButton btnOK = new JButton(new AbstractAction("确定") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dialog.dispose();
+
             }
         });
 
