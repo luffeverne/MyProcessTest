@@ -6,17 +6,14 @@ import com.MyProcess.domain.Image;
 import com.MyProcess.component.MySelectCoordinateDialog;
 import com.MyProcess.component.MyShowDialog;
 import com.MyProcess.util.ScreenUtils;
+import org.opencv.dnn.Model;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +25,9 @@ public class MainGUI {
 
     /*自定义图片*/
     Image[] images = {
-            new Image("图片1          ", new ImageIcon("")),
-            new Image("图片2          ", new ImageIcon("")),
-            new Image("图片3          ", new ImageIcon("")),
+            new Image("图片1                   ", new ImageIcon("")),
+            new Image("图片2                   ", new ImageIcon("")),
+            new Image("图片3                   ", new ImageIcon("")),
     };
     int index = 0;
     boolean hasImage = false;
@@ -47,16 +44,8 @@ public class MainGUI {
     JMenu file = new JMenu("文件");
     JMenu help = new JMenu("帮助");
 
-    // 创建PopubMenu菜单
-    private PopupMenu popupMenu = new PopupMenu();
-    // 创建菜单条
-    private MenuItem saveCoordinate = new MenuItem("保存坐标");
-    private MenuItem saveFile = new MenuItem("保存图片");
-
-
     // 创建菜单条目
     // 用来记录用户选择的图片
-    BufferedImage image;
     String currentPath; // 记录当前路径
     int currentIndex = 0; //记录当前图片序号
     JMenuItem openFileItem = new JMenuItem(new AbstractAction("打开文件") {
@@ -83,6 +72,9 @@ public class MainGUI {
 
             currentIndex = (index == 0 ? 0 : index % 3 - 1);
             currentPath = imagePath;
+
+            jf.repaint();
+            imageCover.repaint();
         }
     });
 
@@ -108,15 +100,26 @@ public class MainGUI {
                 Coordinate c = coordinatesList.get(i);
                 System.out.println(c.getX() + "," + c.getY());
             }*/
+            // 显示生成的带圆心坐标的新图片
             images[currentIndex % 3].setName("src_process" + currentIndex % 3 + ".jpg");
             images[currentIndex % 3].setIcon(new ImageIcon("src/images/src_process" + currentIndex % 3 + ".jpg"));
+
+            // 重新刷新
+            jf.repaint();
         }
     };
     Action selectBaseVector = new AbstractAction("选择基矢点") {
         @Override
         public void actionPerformed(ActionEvent e) {
             // 自定义设置基矢点对话框 。用户输入基矢点的"上下左右"点
-            new MySelectCoordinateDialog().showCustomDialog(jf, jf, coordinatesList);
+            new MySelectCoordinateDialog().showCustomDialog(jf, jf, coordinatesList, currentIndex % 3);
+
+            // 显示生成的带圆心坐标带箭头的新图片
+            images[currentIndex % 3].setName("src_processArrow" + currentIndex % 3 + ".jpg");
+            images[currentIndex % 3].setIcon(new ImageIcon("src/images/src_processArrow" + currentIndex % 3 + ".jpg"));
+
+            // 重新刷新
+            jf.repaint();
         }
     };
 
@@ -138,8 +141,6 @@ public class MainGUI {
     JList<Image> imagesJList = new JList<>(images);
     // 右边显示图片
     JLabel imageCover = new JLabel();
-
-    JPanel panel = new JPanel();
 
 
     public void init() {
@@ -163,12 +164,18 @@ public class MainGUI {
 
 
         // add Action Listener for imagesJList
-        imagesJList.addListSelectionListener(new ListSelectionListener() {
+     /*   imagesJList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 Image image = imagesJList.getSelectedValue();
                 imageCover.setIcon(image.getIcon());
             }
+        });*/
+
+        // 为imagesJList注册监听 lambda格式
+        imagesJList.addListSelectionListener(e -> {
+            Image image = imagesJList.getSelectedValue();
+            imageCover.setIcon(image.getIcon());
         });
 
         // 为JLabel注册鼠标监听
@@ -179,15 +186,9 @@ public class MainGUI {
                 System.out.println("(" + e.getX() + "," + e.getY() + ")");
                 // 自定义对话框 -设置基矢点。用户输入基矢点的"上下左右"点
 
-
             }
         });
 
-        // 组装弹出菜单
-        popupMenu.add(saveCoordinate);
-        popupMenu.add(saveFile);
-        panel.add(popupMenu);
-        jf.add(panel, BorderLayout.SOUTH);
 
         //create a horizontal split pane
         JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, imagesJList, imageCover);

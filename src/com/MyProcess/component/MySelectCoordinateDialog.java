@@ -12,10 +12,10 @@ public class MySelectCoordinateDialog {
      *
      * @param owner 对话框的拥有者
      * @param parentComponent 对话框的父级组件
-     *
+     * @param index 记录现在在操作第几张图片
      *
      * */
-    public static void showCustomDialog(Frame owner,  Component parentComponent, List<Coordinate> arrsList) {
+    public  void showCustomDialog(Frame owner, Component parentComponent, List<Coordinate> arrsList, int index) {
 
         // 创建一个模态对话框
         final JDialog dialog = new JDialog(owner, "选择基矢点", true);
@@ -31,15 +31,15 @@ public class MySelectCoordinateDialog {
         dialog.setLocationRelativeTo(parentComponent);
 
         // 创建标签的显示消息
-        JLabel labelTip = new JLabel("输入基矢点的邻点序号");
+        JLabel labelTip = new JLabel("输入基矢点O的邻点序号和基矢点a、b");
 
         JLabel centerLabel = new JLabel("设为基矢点O的序号：");
         JTextField centerTF = new JTextField(5);
 
-        JLabel upLabel = new JLabel("“上”邻坐标(作为基矢a)序号：");
+        JLabel upLabel = new JLabel("“上”邻坐标序号：");
         JTextField upTF = new JTextField(5);
 
-        JLabel rightLabel = new JLabel("“右”邻坐标(作为基矢b)序号：");
+        JLabel rightLabel = new JLabel("“右”邻坐标序号：");
         JTextField rightTF = new JTextField(5);
 
         JLabel downLabel = new JLabel("“下”邻坐标序号：");
@@ -48,12 +48,11 @@ public class MySelectCoordinateDialog {
         JLabel leftLabel = new JLabel("“左”邻坐标序号：");
         JTextField leftTF = new JTextField(5);
 
-        JLabel upPlusLabel = new JLabel("基矢a的“上”邻坐标序号：");
-        JTextField upPlusTF = new JTextField(5);
+        JLabel aCoordinate = new JLabel("基矢点a序号：");
+        JTextField aCoordinateTF = new JTextField(5);
 
-        JLabel rightPlusLabel = new JLabel("基矢b的“右”邻坐标序号：");
-        JTextField rightPlusTF = new JTextField(5);
-
+        JLabel bCoordinate = new JLabel("基矢点b序号：");
+        JTextField bCoordinateTF = new JTextField(5);
 
 
         // 创建一个按钮用于“处理”，并关闭弹窗窗口
@@ -66,14 +65,14 @@ public class MySelectCoordinateDialog {
                 String rightString = rightTF.getText();
                 String downString = downTF.getText();
                 String leftString = leftTF.getText();
-                String upPlusString = upPlusTF.getText();
-                String rightPlusString = rightPlusTF.getText();
-                System.out.println(upString+" "+rightString+" "+downString+" "+leftString);
+                String aString = aCoordinateTF.getText();
+                String bString = bCoordinateTF.getText();
+
 
                 /* 对 O 坐标*/
-                // Y: （左+右Y坐标）/2       X : (上+下X坐标) / 2
-                double aveOX =(arrsList.get(Integer.parseInt(upString)).getX() + arrsList.get(Integer.parseInt(downString)).getX()) / 2;
-                double aveOY =(arrsList.get(Integer.parseInt(leftString)).getY() + arrsList.get(Integer.parseInt(rightString)).getY()) / 2;
+                //  X: （左+右X坐标）/2 ,  Y : (上+下Y坐标) / 2
+                double aveOX = (arrsList.get(Integer.parseInt(leftString)).getX() + arrsList.get(Integer.parseInt(rightString)).getX()) / 2;
+                double aveOY = (arrsList.get(Integer.parseInt(upString)).getY() + arrsList.get(Integer.parseInt(downString)).getY()) / 2;
 
                 // 再一次进行二分求值, 得到基矢中心的 X、Y 坐标
                 double oX = arrsList.get(Integer.parseInt(centerString)).getX();
@@ -81,18 +80,27 @@ public class MySelectCoordinateDialog {
                 aveOX = (aveOX + oX) / 2;
                 aveOY = (aveOY + oY) / 2;
 
+                // TODO 求出所有m、n   ： (x, y) = m * 矢量a + n * 矢量b， 然后再反求回 矢量a， b的坐标
                 /* 对 a 坐标*/
-                // 对基矢a进行处理
-                double aX = arrsList.get(Integer.parseInt(upPlusString)).getX();
+                double aX = arrsList.get(Integer.parseInt(aString)).getX();
+                double aY = arrsList.get(Integer.parseInt(aString)).getY();
 
                 /* 对 b 坐标*/
-                // TODO 改！！！！！！！
-                JOptionPane.showMessageDialog(dialog, "您选择的基矢O"+"("+oX+", "+oY+")\n"+"修正后基矢O"+"("+aveOX+", "+aveOY+")\n" +
-                        "您选择的基矢a"+"("+oX+", "+oY+")\n"+"修正后基矢a"+"("+aveOX+", "+aveOY+")\n" +
-                        "您选择的基矢b"+"("+oX+", "+oY+")\n"+"修正后基矢b"+"("+aveOX+", "+aveOY+")\n",
+                double bX = arrsList.get(Integer.parseInt(bString)).getX();
+                double bY = arrsList.get(Integer.parseInt(bString)).getY();
+
+                
+
+
+
+                JOptionPane.showMessageDialog(dialog, "您选择的基矢O" + "(" + oX + ", " + oY + ")\n" + "修正后基矢O" + "(" + aveOX + ", " + aveOY + ")\n\n" +
+                                "您选择的基矢a" + "(" + aX + ", " + aY + ")\n\n" +
+                                "您选择的基矢b" + "(" + bX + ", " + bY + ")\n\n",
                         "基矢值", JOptionPane.PLAIN_MESSAGE);
 
-                System.out.println("("+aveOX+", "+aveOY+")");
+                // 标出矢量a, b
+                new DrawArrow().drawArrowOfAB(index, oX, oY, aX, aY, bX, bY);
+
                 dialog.dispose();
             }
         });
@@ -144,17 +152,17 @@ public class MySelectCoordinateDialog {
         leftBox.add(Box.createHorizontalStrut(5));
         leftBox.add(leftTF);
 
-        // 组装上上Box
-        Box upPlusBox = Box.createHorizontalBox();
-        upPlusBox.add(upPlusLabel);
-        upPlusBox.add(Box.createHorizontalStrut(5));
-        upPlusBox.add(upPlusTF);
+        // 组装基矢点aBox
+        Box aBox = Box.createHorizontalBox();
+        aBox.add(aCoordinate);
+        aBox.add(Box.createHorizontalStrut(5));
+        aBox.add(aCoordinateTF);
 
-        // 组装右右Box
-        Box rightPlusBox = Box.createHorizontalBox();
-        rightPlusBox.add(rightPlusLabel);
-        rightPlusBox.add(Box.createHorizontalStrut(5));
-        rightPlusBox.add(rightPlusTF);
+        // 组装基矢点bBox
+        Box bBox = Box.createHorizontalBox();
+        bBox.add(bCoordinate);
+        bBox.add(Box.createHorizontalStrut(5));
+        bBox.add(bCoordinateTF);
 
         // 按钮Box
         Box btnBox = Box.createHorizontalBox();
@@ -177,9 +185,9 @@ public class MySelectCoordinateDialog {
         box.add(Box.createVerticalStrut(10));
         box.add(leftBox);
         box.add(Box.createVerticalStrut(10));
-        box.add(upPlusBox);
+        box.add(aBox);
         box.add(Box.createVerticalStrut(10));
-        box.add(rightPlusBox);
+        box.add(bBox);
         box.add(Box.createVerticalStrut(10));
         box.add(btnBox);
 

@@ -21,7 +21,7 @@ public class MyShowDialog {
      * @param String[] arrs 显示内容
      *
      * */
-    public static void showCustomDialog(Frame owner, Component parentComponent, List<Coordinate> arrsList) {
+    public  void showCustomDialog(Frame owner, Component parentComponent, List<Coordinate> arrsList) {
         // 创建一个模态对话框
         final JDialog dialog = new JDialog(owner, "圆心坐标", true);
         // 设置对话框的宽高
@@ -61,6 +61,7 @@ public class MyShowDialog {
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
+                JOptionPane.showMessageDialog(dialog, "导出成功", "提示", JOptionPane.PLAIN_MESSAGE);
                 dialog.dispose();
 
             }
