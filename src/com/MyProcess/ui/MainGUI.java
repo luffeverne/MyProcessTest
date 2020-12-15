@@ -120,12 +120,6 @@ public class MainGUI {
         }
     };
 
-    Action normalizedBaseVector = new AbstractAction("归一化基矢") {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-        }
-    };
     Action exportCoordinate = new AbstractAction("另存圆心坐标为txt文件") {
 
         @Override
@@ -160,7 +154,6 @@ public class MainGUI {
         // 组装工具条
         toolBar.add(findCenterOfCircle);
         toolBar.add(selectBaseVector);
-        toolBar.add(normalizedBaseVector);
         toolBar.add(exportCoordinate);
         jf.add(toolBar, BorderLayout.NORTH);
 

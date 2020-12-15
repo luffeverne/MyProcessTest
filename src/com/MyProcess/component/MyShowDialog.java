@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 
@@ -36,16 +39,28 @@ public class MyShowDialog {
         // 给文本域添加内容
         for (int i = 0; i < arrsList.size(); i++) {
             Coordinate c = arrsList.get(i);
-            jTextArea.append("(" + c.getX() + ", " + c.getY() + ")" + "\n");
+            jTextArea.append(i + " " + "(" + c.getX() + ", " + c.getY() + ")" + "\n");
         }
 
 
         // 创建一个按钮用于关闭对话框
-        JButton btnOK = new JButton(new AbstractAction("导出") {
+        JButton btnExport = new JButton(new AbstractAction("导出") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // TODO 保存文件流，导成txt文件格式
+                PrintWriter outputStream = null;
+                try {
+                    outputStream = new PrintWriter(new FileWriter("src/com/Myprocess/output/AllCoordinates.txt"));
 
+                    String[] lines = jTextArea.getText().split(" ");
+                    for (int i = 0; i < lines.length; i++) {
+                        outputStream.write(lines[i]);
+                    }
+                    outputStream.close();
+
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
                 dialog.dispose();
 
             }
@@ -55,7 +70,7 @@ public class MyShowDialog {
         JPanel panel = new JPanel();
         // 组装组件
         panel.add(new JScrollPane(jTextArea));
-        panel.add(btnOK, BorderLayout.NORTH);
+        panel.add(btnExport, BorderLayout.NORTH);
 
         // 设置对话框的内容面板
         dialog.setContentPane(panel);
