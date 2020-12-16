@@ -75,10 +75,10 @@ public class FindCenterOfCircle {
             radiusList.add((int)radius[0]);
         }
 
-        for (int i = 0; i < list.size(); i++) {
-            Scalar color =  new Scalar(255, 255, 255);
-            Scalar color2 = new Scalar(255, 144 , 30);
+        Scalar color =  new Scalar(255, 255, 255);
+        Scalar color2 = new Scalar(255, 144 , 30);
 
+        for (int i = 0; i < list.size(); i++) {
             // 绘制圆心
             Imgproc.circle(src, centerList.get(i), 1, color, 1, Imgproc.LINE_AA);
 //            Imgproc.drawMarker(src, centerList.get(i), color);

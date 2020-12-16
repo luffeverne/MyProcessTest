@@ -1,6 +1,8 @@
 package com.MyProcess.domain;
 
-public class Coordinate {
+import org.opencv.core.Point;
+
+public class Coordinate extends Point {
     private double x;
     private double y;
 
@@ -28,6 +30,7 @@ public class Coordinate {
         this.y = y;
     }
 
+
     @Override
     public String toString() {
         return "Coordinate{" +
@@ -35,4 +38,6 @@ public class Coordinate {
                 ", y=" + y +
                 '}';
     }
+
+
 }

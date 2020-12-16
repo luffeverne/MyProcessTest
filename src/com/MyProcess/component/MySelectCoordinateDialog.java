@@ -12,10 +12,11 @@ public class MySelectCoordinateDialog {
      *
      * @param owner 对话框的拥有者
      * @param parentComponent 对话框的父级组件
+     * @param List<Coordinate> arrsList 所有的圆心坐标的Set集合
      * @param index 记录现在在操作第几张图片
      *
      * */
-    public  void showCustomDialog(Frame owner, Component parentComponent, List<Coordinate> arrsList, int index) {
+    public void showCustomDialog(Frame owner, Component parentComponent, List<Coordinate> arrsList, int index) {
 
         // 创建一个模态对话框
         final JDialog dialog = new JDialog(owner, "选择基矢点", true);
@@ -89,17 +90,69 @@ public class MySelectCoordinateDialog {
                 double bX = arrsList.get(Integer.parseInt(bString)).getX();
                 double bY = arrsList.get(Integer.parseInt(bString)).getY();
 
-                
 
+
+                // mMatrixT[m][n]
+                double[][] mMatrix = new double[arrsList.size()][2];
+                double[][] mMatrixT = new double[2][arrsList.size()];
+                double[][] rMatrix = new double[arrsList.size()][2];
+
+
+                int size = arrsList.size();
+
+
+                // 计算出矩阵M 以及 初始化矩阵R
+                for (int i = 0; i < size; i++) {
+                    Coordinate c = arrsList.get(i);
+
+                    rMatrix[i][0] = c.getX();
+                    rMatrix[i][1] = c.getY();
+
+                    mMatrix[i][0] = (bY * c.getX() - bX * c.getY()) / (aX * bY - bX * aY);
+                    mMatrix[i][1] = (aY * c.getX() - aX * c.getY()) / (bX * aY - aX * bY);
+                }
+
+                // 矩阵M转置
+                for (int i = 0; i < 2; i++) {
+                    for (int j = 0; j < size; j++) {
+                        mMatrixT[i][j] = mMatrix[j][i];
+                    }
+                }
+
+                // 转置M * M
+                double[][] mTm = new TwoMatrixMultiply().Multiply(mMatrixT, mMatrix);
+
+                // （转置M * M） 的逆矩阵
+                double[][] revMatrix = new OrderTwoInverseMatrix(). getMartrixResult(mTm);
+
+                // (（转置M * M） 的逆矩阵 ) * 转置M
+                double[][] tMatrix = new TwoMatrixMultiply().Multiply(revMatrix, mMatrixT);
+
+
+                //  (（转置M * M） 的逆矩阵 ) * 转置M  * R
+                double[][] resMatrix = new TwoMatrixMultiply().Multiply(tMatrix, rMatrix);
+
+              /*  System.out.println("((转置M * M)的逆矩阵) * 转置M * R");
+                for (int i = 0; i < resMatrix.length; i++) {
+                    for (int j = 0; j < resMatrix[0].length; j++) {
+                        System.out.print(resMatrix[i][j]+" ");
+                    }
+                    System.out.println(" ");
+                }
+*/
+                double reviseAX = resMatrix[0][0];
+                double reviseAY = resMatrix[0][1];
+                double reviseBX = resMatrix[1][0];
+                double reviseBY = resMatrix[1][1];
 
 
                 JOptionPane.showMessageDialog(dialog, "您选择的基矢O" + "(" + oX + ", " + oY + ")\n" + "修正后基矢O" + "(" + aveOX + ", " + aveOY + ")\n\n" +
-                                "您选择的基矢a" + "(" + aX + ", " + aY + ")\n\n" +
-                                "您选择的基矢b" + "(" + bX + ", " + bY + ")\n\n",
+                                "您选择的基矢a" + "(" + aX + ", " + aY + ")\n" +  "修正后基矢A" + "(" + reviseAX + ", " + reviseAY + ")\n\n" +
+                                "您选择的基矢b" + "(" + bX + ", " + bY + ")\n" +  "修正后基矢B" + "(" + reviseBX + ", " + reviseBY + "\n\n",
                         "基矢值", JOptionPane.PLAIN_MESSAGE);
 
                 // 标出矢量a, b
-                new DrawArrow().drawArrowOfAB(index, oX, oY, aX, aY, bX, bY);
+                new DrawArrow().drawArrowOfAB(index, oX, oY, aX, aY, bX, bY, arrsList);
 
                 dialog.dispose();
             }

@@ -61,7 +61,7 @@ public class MyShowDialog {
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
-                JOptionPane.showMessageDialog(dialog, "导出成功", "提示", JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, "导出到AllCoordinates.txt成功", "提示", JOptionPane.PLAIN_MESSAGE);
                 dialog.dispose();
 
             }

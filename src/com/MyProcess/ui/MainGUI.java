@@ -6,7 +6,6 @@ import com.MyProcess.domain.Image;
 import com.MyProcess.component.MySelectCoordinateDialog;
 import com.MyProcess.component.MyShowDialog;
 import com.MyProcess.util.ScreenUtils;
-import org.opencv.dnn.Model;
 
 import javax.swing.*;
 import java.awt.*;
