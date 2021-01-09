@@ -16,7 +16,8 @@ public class CircleAndBorderPlusDemo {
 
     public static void main(String[] args) {
 //        Mat src = Imgcodecs.imread("C:\\Users\\Luffe\\Pictures\\test\\circles\\12.jpg");
-        Mat src = Imgcodecs.imread("C:\\Users\\Luffe\\Pictures\\test\\circles\\ImageTest.tif");
+//        Mat src = Imgcodecs.imread("src/images/test.tif");
+        Mat src = Imgcodecs.imread("src/images/2-11- 227Al2O3 .tif");
         Mat dst = new Mat();
 
         //将图像变灰
@@ -47,7 +48,7 @@ public class CircleAndBorderPlusDemo {
          * @param类型阈值类型
          * THRESH_BINARY = 0, 二进制阈值化 在运用该阈值类型的时候，先要选定一个特定的阈值量，比如：125，这样，新的阈值产生规则
          */
-            Imgproc.threshold(dst, dst, 200, 255, Imgproc.THRESH_BINARY);
+            Imgproc.threshold(dst, dst, 128, 255, Imgproc.THRESH_BINARY_INV);
 
         // 查找二进制图像中的轮廓
 
@@ -123,7 +124,7 @@ public class CircleAndBorderPlusDemo {
 
         for (int i = 0; i < list.size(); i++) {
             Scalar color = new Scalar(0, 220, 0);
-            Scalar color2 = new Scalar(0, 0 , 220);
+            Scalar color2 = new Scalar(255, 255 , 255);
 
             /**
              * 绘制轮廓

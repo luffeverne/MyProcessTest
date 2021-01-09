@@ -1,10 +1,10 @@
 package com.MyProcess.ui;
 
-import com.MyProcess.component.FindCenterOfCircle;
+import com.MyProcess.component.drwaUtil.FindCenterOfCircle;
 import com.MyProcess.domain.Coordinate;
 import com.MyProcess.domain.Image;
-import com.MyProcess.component.MySelectCoordinateDialog;
-import com.MyProcess.component.MyShowDialog;
+import com.MyProcess.component.dialogUtil.MySelectCoordinateDialog;
+import com.MyProcess.component.dialogUtil.MyShowDialog;
 import com.MyProcess.util.ScreenUtils;
 
 import javax.swing.*;
@@ -24,14 +24,14 @@ public class MainGUI {
 
     /*自定义图片*/
     Image[] images = {
-            new Image("图片1                   ", new ImageIcon("")),
-            new Image("图片2                   ", new ImageIcon("")),
-            new Image("图片3                   ", new ImageIcon("")),
+            new Image("Picture1           ", new ImageIcon("")),
+            new Image("Picture2           ", new ImageIcon("")),
+            new Image("Picture3           ", new ImageIcon("")),
     };
     int index = 0;
     boolean hasImage = false;
 
-    JFrame jf = new JFrame("程序accurate");
+    JFrame jf = new JFrame("accurate");
     // 创建打开文件对话框
     JFileChooser chooser = new JFileChooser("./src/images");
 
@@ -40,14 +40,14 @@ public class MainGUI {
     JMenuBar jMenuBar = new JMenuBar();
 
     // 创建菜单
-    JMenu file = new JMenu("文件");
-    JMenu help = new JMenu("帮助");
+    JMenu file = new JMenu("File");
+    JMenu help = new JMenu("Help");
 
     // 创建菜单条目
     // 用来记录用户选择的图片
     String currentPath; // 记录当前路径
     int currentIndex = 0; //记录当前图片序号
-    JMenuItem openFileItem = new JMenuItem(new AbstractAction("打开文件") {
+    JMenuItem openFileItem = new JMenuItem(new AbstractAction("open file") {
         @Override
         public void actionPerformed(ActionEvent e) {
             hasImage = true;
@@ -69,7 +69,12 @@ public class MainGUI {
             images[index % 3].setIcon(new ImageIcon(imagePath));
             index++;
 
-            currentIndex = (index == 0 ? 0 : index % 3 - 1);
+
+            if (index != 3) {
+                currentIndex = (index % 3 == 0 ? 0 : index - 1);
+            } else {
+                currentIndex = 2;
+            }
             currentPath = imagePath;
 
             jf.repaint();
@@ -77,7 +82,7 @@ public class MainGUI {
         }
     });
 
-    JMenuItem exit = new JMenuItem(new AbstractAction("关闭程序") {
+    JMenuItem exit = new JMenuItem(new AbstractAction("exit") {
         @Override
         public void actionPerformed(ActionEvent e) {
             System.exit(0);
@@ -88,12 +93,13 @@ public class MainGUI {
     JToolBar toolBar = new JToolBar();
 
     // create Acion steps , then JtoolBar.add(steps)
-    Action findCenterOfCircle = new AbstractAction("图片处理-找圆心") {
+    Action findCenterOfCircle = new AbstractAction("find center") {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             // 保存所有坐标值
             coordinatesList = new FindCenterOfCircle().handlePicture(currentPath, currentIndex);
+
             // 验证所有圆心坐标
            /* for (int i = 0; i < coordinatesList.size(); i++) {
                 Coordinate c = coordinatesList.get(i);
@@ -107,22 +113,23 @@ public class MainGUI {
             jf.repaint();
         }
     };
-    Action selectBaseVector = new AbstractAction("选择基矢点") {
+    Action selectBaseVector = new AbstractAction("set Coordinate") {
         @Override
         public void actionPerformed(ActionEvent e) {
             // 自定义设置基矢点对话框 。用户输入基矢点的"上下左右"点
-            new MySelectCoordinateDialog().showCustomDialog(jf, jf, coordinatesList, currentIndex % 3);
+            new MySelectCoordinateDialog().showCustomDialog(jf, jf, coordinatesList, currentIndex, currentPath);
 
             // 显示生成的带圆心坐标带箭头的新图片
-            images[currentIndex % 3].setName("src_processArrow" + currentIndex % 3 + ".jpg");
-            images[currentIndex % 3].setIcon(new ImageIcon("src/images/src_processArrow" + currentIndex % 3 + ".jpg"));
+            images[currentIndex % 3].setName("src_processArrowAndNewCoo" + currentIndex % 3 + ".jpg");
+            images[currentIndex % 3].setIcon(new ImageIcon("src/images/src_processArrowAndNewCoo" + currentIndex % 3 + ".jpg"));
 
             // 重新刷新
             jf.repaint();
+
         }
     };
 
-    Action exportCoordinate = new AbstractAction("另存圆心坐标为txt文件") {
+    Action exportCoordinate = new AbstractAction("export") {
 
         @Override
         public void actionPerformed(ActionEvent e) {

@@ -10,6 +10,8 @@
     <orderEntry type="library" name="jai-codec-1.1.3" level="project" />
     <orderEntry type="library" name="jai_core-1.1.3" level="project" />
     <orderEntry type="library" name="jai_imageio" level="project" />
-    <orderEntry type="library" name="opencv-440" level="project" />
+    <orderEntry type="library" name="opencv-4401" level="project" />
+    <orderEntry type="library" name="jai_core" level="project" />
+    <orderEntry type="library" name="jai_codec-1.1.3" level="project" />
   </component>
 </module>
