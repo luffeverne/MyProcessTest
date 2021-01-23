@@ -21,7 +21,7 @@ public class MyShowDialog {
      * @param String[] arrs 显示内容
      *
      * */
-    public  void showCustomDialog(Frame owner, Component parentComponent, List<Coordinate> arrsList) {
+    public  void showCustomDialog(Frame owner, Component parentComponent, List<Coordinate> arrsList, int index) {
         // 创建一个模态对话框
         final JDialog dialog = new JDialog(owner, "圆心坐标", true);
         // 设置对话框的宽高
@@ -50,11 +50,11 @@ public class MyShowDialog {
                 // TODO 保存文件流，导成txt文件格式
                 PrintWriter outputStream = null;
                 try {
-                    outputStream = new PrintWriter(new FileWriter("src/com/Myprocess/output/AllCoordinates.txt"));
+                    outputStream = new PrintWriter(new FileWriter("src/com/Myprocess/output/AllCoordinates"+index+".txt"));
 
                     String[] lines = jTextArea.getText().split(" ");
                     for (int i = 0; i < lines.length; i++) {
-                        System.out.print(lines[i]);
+//                        System.out.print(lines[i]);
                         outputStream.write(lines[i]+" ");
                     }
                     outputStream.close();

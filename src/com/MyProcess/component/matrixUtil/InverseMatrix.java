@@ -1,5 +1,6 @@
 package com.MyProcess.component.matrixUtil;
 
+/* 求逆矩阵*/
 public class InverseMatrix {
 
     /*

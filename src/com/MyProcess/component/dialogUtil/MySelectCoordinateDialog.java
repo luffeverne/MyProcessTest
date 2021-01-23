@@ -4,13 +4,17 @@ import com.MyProcess.component.drwaUtil.DrawArrow;
 import com.MyProcess.component.matrixUtil.OrderTwoInverseMatrix;
 import com.MyProcess.component.drwaUtil.DrawArrowAndNum;
 import com.MyProcess.component.drwaUtil.DrawCoordinate;
+import com.MyProcess.component.matrixUtil.TransMatrix;
 import com.MyProcess.component.matrixUtil.TwoMatrixMultiply;
 import com.MyProcess.component.toolUtil.FormatDouble;
 import com.MyProcess.domain.Coordinate;
+import com.MyProcess.domain.Vector;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -39,12 +43,12 @@ public class MySelectCoordinateDialog {
         dialog.setLocationRelativeTo(parentComponent);
 
         // 创建标签的显示消息
-        JLabel labelTip = new JLabel("输入基矢点O的邻点序号和基矢点a、b");
+//        JLabel labelTip = new JLabel("输入基矢点O的邻点序号和基矢点a、b");
 
-        JLabel centerLabel = new JLabel("O");
+        JLabel centerLabel = new JLabel("O:");
         JTextField centerTF = new JTextField(5);
 
-        JLabel upLabel = new JLabel("“Up：");
+        JLabel upLabel = new JLabel("Up:");
         JTextField upTF = new JTextField(5);
 
         JLabel rightLabel = new JLabel("Right:");
@@ -53,13 +57,13 @@ public class MySelectCoordinateDialog {
         JLabel downLabel = new JLabel("Down:");
         JTextField downTF = new JTextField(5);
 
-        JLabel leftLabel = new JLabel("Left");
+        JLabel leftLabel = new JLabel("Left:");
         JTextField leftTF = new JTextField(5);
 
-        JLabel aCoordinate = new JLabel("a");
+        JLabel aCoordinate = new JLabel("a:");
         JTextField aCoordinateTF = new JTextField(5);
 
-        JLabel bCoordinate = new JLabel("b");
+        JLabel bCoordinate = new JLabel("b:");
         JTextField bCoordinateTF = new JTextField(5);
 
 
@@ -68,6 +72,8 @@ public class MySelectCoordinateDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                // 声明 基矢的长度
+                double aVectorLen = 0, bVectorLen = 0;
 
                 // TODO 等待用户输入 上下左右 的圆心序号，进行计算基矢坐标处理
                 String centerString = centerTF.getText();
@@ -140,11 +146,13 @@ public class MySelectCoordinateDialog {
                 new DrawCoordinate().drawCoordinateOfNew(index, mMatrix, arrsList);
 
                 // 矩阵M转置
-                for (int i = 0; i < 2; i++) {
+                mMatrixT =  TransMatrix.getTransMatrix(mMatrix);
+
+                /* for (int i = 0; i < 2; i++) {
                     for (int j = 0; j < size; j++) {
                         mMatrixT[i][j] = mMatrix[j][i];
                     }
-                }
+                }*/
 
                 // 转置M * M
                 double[][] mTm = new TwoMatrixMultiply().Multiply(mMatrixT, mMatrix);
@@ -179,9 +187,31 @@ public class MySelectCoordinateDialog {
                 // 标出矢量a，b，以及更新坐标
                 new DrawArrowAndNum().drawArrowOfAB(index, oX, oY, reviseAX, reviseAY, reviseBX, reviseBY, mMatrix, arrsList);
 
+                aVectorLen = fd.formatDouble(Math.sqrt((reviseAX - aveOX) * (reviseAX - aveOX) + (reviseAY - aveOY) * (reviseAY - aveOY)));
+                bVectorLen = fd.formatDouble(Math.sqrt((reviseBX - aveOX) * (reviseBX - aveOX) + (reviseBY - aveOY) * (reviseBY - aveOY)));
+
+                System.out.println(aVectorLen+ ",   "+ bVectorLen);
+
+
+
+
+                // ToDo 输入到txt文档
+                //如果有3对了，把基矢值的长度都存在一个txt文档中
+                if (index == 2) {
+
+                    try {
+                        FileReader file = new FileReader("src/com/Myprocess/output/vectorTest.txt");
+                    } catch (FileNotFoundException fileNotFoundException) {
+                        fileNotFoundException.printStackTrace();
+                    }
+                }
                 dialog.dispose();
             }
         });
+
+
+        
+
 
         // 创建一个按钮用于“取消”，不进行处理，并关闭弹窗窗口
         JButton btnCancel = new JButton(new AbstractAction("取消") {
@@ -197,7 +227,7 @@ public class MySelectCoordinateDialog {
         // 组装Label
         Box labelBox = Box.createHorizontalBox();
         labelBox.add(Box.createHorizontalStrut(10));
-        labelBox.add(labelTip);
+//        labelBox.add(labelTip);
 
 
         // 组装中心Box
