@@ -24,14 +24,14 @@ import java.util.List;
 
 public class MainGUI {
     List<Coordinate> coordinatesList = new ArrayList<>();
-    final int WIDTH = 800;
-    final int HEIGHT = 760;
+    final int WIDTH = 1000;
+    final int HEIGHT = 900;
 
     /*自定义图片*/
     Image[] images = {
-            new Image("Picture1           ", new ImageIcon("")),
-            new Image("Picture2           ", new ImageIcon("")),
-            new Image("Picture3           ", new ImageIcon("")),
+            new Image("Picture1                    ", new ImageIcon("")),
+            new Image("Picture2                    ", new ImageIcon("")),
+            new Image("Picture3                    ", new ImageIcon("")),
     };
     int index = 0;
     boolean hasImage = false;
@@ -158,7 +158,7 @@ public class MainGUI {
             double[][] matrix = new double[3][2]; // A矩阵，3个基矢的x,y坐标
             double[][] tMatrix = new double[2][3]; // 转置A矩阵
             double[][] aaMatrix = new double[3][3]; // 计算AA矩阵
-            double[] t = new double[8]; // 暂存
+            double[] t = new double[18]; // 暂存
 
 
             double[][] rMatrix = new double[rLen][3]; // 11 * 3
@@ -206,9 +206,11 @@ public class MainGUI {
             aveVector[1] = fd.formatDouble (vector[2] + vector[3]) / 2;
             aveVector[2] = fd.formatDouble (vector[4] + vector[5]) / 2;
 
-            /*for (int i = 0; i < 3; i++) {
+            // 基矢的平均长度
+            System.out.println("3个基矢的平均长度");
+            for (int i = 0; i < 3; i++) {
                 System.out.println(aveVector[i]);
-            }*/
+            }
 
 
             // 计算 AA矩阵
@@ -228,10 +230,49 @@ public class MainGUI {
                 exception.printStackTrace();
             }
 
+            // 每张基矢a和b之间的夹角
+            System.out.println("每张基矢a和b之间的夹角:");
+            for (int i = 0, j = 0; j < 3; j++) {
+                double test = (t[i] * t[i+2] + t[i+1] * t[i+3]) / (Math.sqrt(t[i] * t[i] + t[i+1] * t[i+1]) * Math.sqrt(t[i+2] * t[i+2] + t[i+3] * t[3]));
+                System.out.println("angle:" + (Math.acos(test) * (180 / Math.PI))+"°");
+                i += 6;
+            }
+            /*double test = (t[0] * t[2] + t[1] * t[3]) / (Math.sqrt(t[0] * t[0] + t[1] * t[1]) * Math.sqrt(t[2] * t[2] + t[3] * t[3]));
+            System.out.println("angle1:" + (Math.acos(test) * (180 / Math.PI))+"°");
+            test = (t[6] * t[8] + t[7] * t[9]) / (Math.sqrt(t[6] * t[6] + t[7] * t[7]) * Math.sqrt(t[8] * t[8] + t[9] * t[9]));
+            System.out.println("angle1:" + (Math.acos(test) * (180 / Math.PI))+"°");
+            test = (t[0] * t[2] + t[1] * t[3]) / (Math.sqrt(t[0] * t[0] + t[1] * t[1]) * Math.sqrt(t[2] * t[2] + t[3] * t[3]));
+            System.out.println("angle1:" + (Math.acos(test) * (180 / Math.PI))+"°");*/
+
+
+        /*    double sin = t[0] * t[3] - t[2] * t[1];
+            double cos = t[0] * t[1] + t[1] * t[3];
+            System.out.println("angle:" + Math.atan2(sin, cos) * (180 / Math.PI));*/
+
+
+
+
+          /*
+            // 求出NaN了， resTest是1.7236301465374249
+            double aVectorX = t[0] - t[4];
+            double aVectorY = t[1] - t[5];
+            double bVectorX = t[2] - t[4];
+            double bVectorY = t[3] - t[5];
+
+            System.out.println(aVectorX+ " " + aVectorY +" " +  bVectorX +" " +  bVectorY);
+            double resTest = (aVectorX * bVectorX + bVectorY * bVectorY) / ((Math.sqrt(aVectorX * aVectorX + aVectorY * aVectorY)) * (Math.sqrt(bVectorX * bVectorX + bVectorY * bVectorY)));
+            System.out.println(resTest);
+            System.out.println("angle:" + (Math.acos(resTest) * (180 / Math.PI)));*/
+
+
+
+            double aveDArrayX = (t[4] + t[10] + t[16]) / 3;
+            double aveDArrayY = (t[5] + t[11] + t[17]) / 3;
+
             // maxtrix 的横坐标
             for (int i = 0, j = 0; i < 3; i++, j += 2) {
-                matrix[i][0] = fd.formatDouble(t[j] - t[6]);
-                matrix[i][1] = fd.formatDouble(t[j + 1] - t[7]);
+                matrix[i][0] = fd.formatDouble(t[j] - aveDArrayX);
+                matrix[i][1] = fd.formatDouble(t[j + 1] - aveDArrayY);
             }
 
            /* for (int i = 0; i < 3; i++) {
@@ -382,6 +423,7 @@ public class MainGUI {
             s12 = FormatDouble.formatDouble(ts12[0]);
 
 
+            System.out.println("\ns11,s22,s33,s23,s13,s12的值：");
             System.out.println(s11 + " "  + s22  + " "  + s33);
             System.out.println(s23 + " "  + s13  + " "  + s12);
 
